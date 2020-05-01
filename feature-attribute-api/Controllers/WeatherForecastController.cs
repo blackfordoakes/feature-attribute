@@ -9,7 +9,7 @@ namespace feature_attribute_api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -24,7 +24,8 @@ namespace feature_attribute_api.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [FeatureFlag(Models.Features.GetForecast)]
+        [HttpGet("forecast")]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
@@ -33,6 +34,20 @@ namespace feature_attribute_api.Controllers
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
+            })
+            .ToArray();
+        }
+
+        [FeatureFlag(Models.Features.MakeItRain)]
+        [HttpGet("rain")]
+        public IEnumerable<WeatherForecast> MakeItRain()
+        {
+            var rng = new Random();
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = rng.Next(-20, 55),
+                Summary = "Rainy"
             })
             .ToArray();
         }
