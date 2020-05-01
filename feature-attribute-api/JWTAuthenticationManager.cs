@@ -27,6 +27,7 @@ namespace feature_attribute_api
 
         public string Authenticate(string apiKey)
         {
+            // NOTE: this should come from a database or other non hard coded method
             List<Features> availableFeatures;
             switch (apiKey.ToLower())
             {
